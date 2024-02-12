@@ -515,6 +515,32 @@ export function parseMessage(command: Command, payload: Uint8Array): EventPayloa
         instanceHitBy: readUint16(view, 0x51),
         instanceId: readUint16(view, 0x53),
       };
+      
+    case Command.BONES:
+      let _bones: { posX: number | null, posY: number | null, posZ: number | null,
+        rotX: number | null, rotY: number | null, rotZ: number | null, rotW: number | null, useQuat: number | null}[] = [];
+
+      for (let index = 0; index < 120; index++) {
+        _bones.push({
+          posX: readFloat(view, 8+index*0x1D),
+          posY: readFloat(view, 12+index*0x1D),
+          posZ: readFloat(view, 16+index*0x1D),
+          rotX: readFloat(view, 20+index*0x1D),
+          rotY: readFloat(view, 24+index*0x1D),
+          rotZ: readFloat(view, 28+index*0x1D),
+          rotW: readFloat(view, 32+index*0x1D),
+          useQuat: readUint8(view, 36+index*0x1D)
+
+        })
+      }
+      return {
+        frame: readInt32(view, 0x1),
+        playerIndex: readUint8(view, 0x5),
+        charID: readUint8(view, 0x6),
+        boneCount: readUint8(view, 0x7),
+        bones: _bones,
+      };
+
     case Command.ITEM_UPDATE:
       return {
         frame: readInt32(view, 0x1),
@@ -577,8 +603,7 @@ export function parseMessage(command: Command, payload: Uint8Array): EventPayloa
         });
 
         pos += offset;
-      }
-
+      };
       return {
         contents: payload.slice(1),
         codes: codes,

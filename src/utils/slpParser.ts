@@ -5,6 +5,7 @@ import set from "lodash/set";
 import semver from "semver";
 
 import type {
+  BonesType,
   EnabledItemType,
   FrameBookendType,
   FrameEntryType,
@@ -55,7 +56,9 @@ export class SlpParser extends EventEmitter {
   private lastFinalizedFrame = Frames.FIRST - 1;
   private options: SlpParserOptions;
   private geckoList: GeckoListType | null = null;
-
+  //private bones: BonesType | null = null;
+  private bones: BonesType[] = [];
+  
   public constructor(options?: Partial<SlpParserOptions>) {
     super();
     this.options = Object.assign({}, defaultSlpParserOptions, options);
@@ -90,6 +93,9 @@ export class SlpParser extends EventEmitter {
         break;
       case Command.GECKO_LIST:
         this._handleGeckoList(payload as GeckoListType);
+        break;
+      case Command.BONES:
+        this._handleBones(payload as BonesType);
         break;
     }
   }
@@ -163,6 +169,10 @@ export class SlpParser extends EventEmitter {
     return this.frames;
   }
 
+ //public getBones(): BonesType | null {
+ //  return this.bones;
+ //}
+
   public getRollbackFrames(): RollbackFrames {
     return {
       frames: this.rollbackCounter.getFrames(),
@@ -182,6 +192,12 @@ export class SlpParser extends EventEmitter {
   private _handleGeckoList(payload: GeckoListType): void {
     this.geckoList = payload;
   }
+  
+  private _handleBones(payload: BonesType): void {
+      const currentFrameNumber = payload.frame!;
+      this.bones.push(payload);
+      set(this.frames, [currentFrameNumber, "frame"], this.bones);
+    }
 
   private _handleGameEnd(payload: GameEndType): void {
     // Finalize remaining frames if necessary

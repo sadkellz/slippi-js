@@ -9,6 +9,7 @@ export enum Command {
   ITEM_UPDATE = 0x3b,
   FRAME_BOOKEND = 0x3c,
   GECKO_LIST = 0x3d,
+  BONES = 0x60,
 }
 
 export type PlayerType = {
@@ -238,6 +239,15 @@ export type ItemUpdateType = {
   instanceId: number | null;
 };
 
+export type BonesType = {
+  frame: number | null;
+  playerIndex: number | null;
+  charID: number | null;
+  boneCount: number | null;
+  bones: { posX: number | null, posY: number | null, posZ: number | null,
+    rotX: number | null, rotY: number | null, rotZ: number | null, rotW: number | null, useQuat: number | null}[]
+};
+
 export type FrameBookendType = {
   frame: number | null;
   latestFinalizedFrame: number | null;
@@ -300,7 +310,8 @@ export type EventPayloadTypes =
   | ItemUpdateType
   | FrameBookendType
   | GameEndType
-  | GeckoListType;
+  | GeckoListType
+  | BonesType;
 
 export type EventCallbackFunc = (
   command: Command,
@@ -315,6 +326,7 @@ export type FrameEntryType = {
     [playerIndex: number]: {
       pre: PreFrameUpdateType;
       post: PostFrameUpdateType;
+      bones: BonesType;
     } | null;
   };
   followers: {
