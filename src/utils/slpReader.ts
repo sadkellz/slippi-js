@@ -517,19 +517,25 @@ export function parseMessage(command: Command, payload: Uint8Array): EventPayloa
       };
       
     case Command.BONES:
-      let _bones: { posX: number | null, posY: number | null, posZ: number | null,
-        rotX: number | null, rotY: number | null, rotZ: number | null, rotW: number | null, useQuat: number | null}[] = [];
+      let _bones: { 
+        posX: number | null, posY: number | null, posZ: number | null,
+        rotX: number | null, rotY: number | null, rotZ: number | null, rotW: number | null, 
+        scaleX: number | null, scaleY: number | null, scaleZ: number | null,
+        useQuat: number | null}[] = [];
 
       for (let index = 0; index < 120; index++) {
         _bones.push({
-          posX: readFloat(view, 8+index*0x1D),
-          posY: readFloat(view, 12+index*0x1D),
-          posZ: readFloat(view, 16+index*0x1D),
-          rotX: readFloat(view, 20+index*0x1D),
-          rotY: readFloat(view, 24+index*0x1D),
-          rotZ: readFloat(view, 28+index*0x1D),
-          rotW: readFloat(view, 32+index*0x1D),
-          useQuat: readUint8(view, 36+index*0x1D)
+          posX: readFloat(view, 8+index*0x28),
+          posY: readFloat(view, 12+index*0x28),
+          posZ: readFloat(view, 16+index*0x28),
+          rotX: readFloat(view, 20+index*0x28),
+          rotY: readFloat(view, 24+index*0x28),
+          rotZ: readFloat(view, 28+index*0x28),
+          rotW: readFloat(view, 32+index*0x28),
+          scaleX: readFloat(view, 36+index*0x28),
+          scaleY: readFloat(view, 40+index*0x28),
+          scaleZ: readFloat(view, 44+index*0x28),
+          useQuat: readUint8(view, 48+index*0x28)
 
         })
       }
@@ -608,6 +614,28 @@ export function parseMessage(command: Command, payload: Uint8Array): EventPayloa
         contents: payload.slice(1),
         codes: codes,
       };
+
+      // case Command.BONES:
+      // const bones: BonesType[] = [];
+      // let copypos = 1;
+      // while (copypos < payload.length) {
+      //   const word1 = readUint32(view, copypos) ?? 0;
+
+
+      //   let offset = 8; // Default code length, most codes are this length
+      //   bones.push({
+      //     frame: word1,
+      //     playerIndex: word1,
+      //     charID: word1,
+      //     boneCount: word1,
+      //   });
+
+      //   copypos += offset;
+      // };
+      // return {
+      //   frame: payload.slice(1),
+      //   // bones: bones,
+      // };
     default:
       return null;
   }

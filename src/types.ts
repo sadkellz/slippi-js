@@ -245,7 +245,9 @@ export type BonesType = {
   charID: number | null;
   boneCount: number | null;
   bones: { posX: number | null, posY: number | null, posZ: number | null,
-    rotX: number | null, rotY: number | null, rotZ: number | null, rotW: number | null, useQuat: number | null}[]
+    rotX: number | null, rotY: number | null, rotZ: number | null, rotW: number | null, 
+    scaleX: number | null, scaleY: number | null, scaleZ: number | null,
+    useQuat: number | null}[]
 };
 
 export type FrameBookendType = {
