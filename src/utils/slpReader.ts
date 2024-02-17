@@ -15,6 +15,7 @@ import type {
   PlayerType,
   PostFrameUpdateType,
   SelfInducedSpeedsType,
+  // BonesType,
 } from "../types";
 import { Command } from "../types";
 import { exists } from "./exists";
@@ -516,37 +517,38 @@ export function parseMessage(command: Command, payload: Uint8Array): EventPayloa
         instanceId: readUint16(view, 0x53),
       };
       
-    case Command.BONES:
-      let _bones: { 
-        posX: number | null, posY: number | null, posZ: number | null,
-        rotX: number | null, rotY: number | null, rotZ: number | null, rotW: number | null, 
-        scaleX: number | null, scaleY: number | null, scaleZ: number | null,
-        useQuat: number | null}[] = [];
+    // case Command.BONES:
+    //   let _bones: { 
+    //     posX: number | null, posY: number | null, posZ: number | null,
+    //     rotX: number | null, rotY: number | null, rotZ: number | null, rotW: number | null, 
+    //     scaleX: number | null, scaleY: number | null, scaleZ: number | null,
+    //     useQuat: number | null}[] = [];
 
-      for (let index = 0; index < 120; index++) {
-        _bones.push({
-          posX: readFloat(view, 8+index*0x28),
-          posY: readFloat(view, 12+index*0x28),
-          posZ: readFloat(view, 16+index*0x28),
-          rotX: readFloat(view, 20+index*0x28),
-          rotY: readFloat(view, 24+index*0x28),
-          rotZ: readFloat(view, 28+index*0x28),
-          rotW: readFloat(view, 32+index*0x28),
-          scaleX: readFloat(view, 36+index*0x28),
-          scaleY: readFloat(view, 40+index*0x28),
-          scaleZ: readFloat(view, 44+index*0x28),
-          useQuat: readUint8(view, 48+index*0x28)
+    //   for (let index = 0; index < 120; index++) {
+    //     _bones.push({
+    //       posX: readFloat(view, 8+index*0x28),
+    //       posY: readFloat(view, 12+index*0x28),
+    //       posZ: readFloat(view, 16+index*0x28),
+    //       rotX: readFloat(view, 20+index*0x28),
+    //       rotY: readFloat(view, 24+index*0x28),
+    //       rotZ: readFloat(view, 28+index*0x28),
+    //       rotW: readFloat(view, 32+index*0x28),
+    //       scaleX: readFloat(view, 36+index*0x28),
+    //       scaleY: readFloat(view, 40+index*0x28),
+    //       scaleZ: readFloat(view, 44+index*0x28),
+    //       useQuat: readUint8(view, 48+index*0x28)
 
-        })
-      }
-      return {
-        frame: readInt32(view, 0x1),
-        playerIndex: readUint8(view, 0x5),
-        charID: readUint8(view, 0x6),
-        boneCount: readUint8(view, 0x7),
-        bones: _bones,
-      };
+    //     })
+    //   }
+    //   return {
+    //     frame: readInt32(view, 0x1),
+    //     playerIndex: readUint8(view, 0x5),
+    //     charID: readUint8(view, 0x6),
+    //     boneCount: readUint8(view, 0x7),
+    //     bones: _bones,
+    //   };
 
+    
     case Command.ITEM_UPDATE:
       return {
         frame: readInt32(view, 0x1),
@@ -567,22 +569,40 @@ export function parseMessage(command: Command, payload: Uint8Array): EventPayloa
         owner: readInt8(view, 0x2a),
         instanceId: readUint16(view, 0x2b),
       };
-    case Command.FRAME_BOOKEND:
-      return {
-        frame: readInt32(view, 0x1),
-        latestFinalizedFrame: readInt32(view, 0x5),
-      };
-    case Command.GAME_END:
-      const placements = [0, 1, 2, 3].map((playerIndex): PlacementType => {
+      case Command.FRAME_BOOKEND:
+        return {
+          frame: readInt32(view, 0x1),
+          latestFinalizedFrame: readInt32(view, 0x5),
+        };
+        case Command.GAME_END:
+          const placements = [0, 1, 2, 3].map((playerIndex): PlacementType => {
         const position = readInt8(view, 0x3 + playerIndex);
         return { playerIndex, position };
       });
-
+      
       return {
         gameEndMethod: readUint8(view, 0x1),
         lrasInitiatorIndex: readInt8(view, 0x2),
         placements,
       };
+
+    case Command.BONES:
+      // let pos1 = 1;
+      // const content = []
+
+        // while (pos1 < payload.length) {
+        //   const word2 = readUint32(view, pos1) ?? 0;
+        //   let offset = 8;
+        //   content.push({
+        //     word2
+        //   })
+
+        //   pos1 += offset;
+
+      return {
+        content: payload.slice(1)
+      };
+
     case Command.GECKO_LIST:
       const codes: GeckoCodeType[] = [];
       let pos = 1;
@@ -615,27 +635,6 @@ export function parseMessage(command: Command, payload: Uint8Array): EventPayloa
         codes: codes,
       };
 
-      // case Command.BONES:
-      // const bones: BonesType[] = [];
-      // let copypos = 1;
-      // while (copypos < payload.length) {
-      //   const word1 = readUint32(view, copypos) ?? 0;
-
-
-      //   let offset = 8; // Default code length, most codes are this length
-      //   bones.push({
-      //     frame: word1,
-      //     playerIndex: word1,
-      //     charID: word1,
-      //     boneCount: word1,
-      //   });
-
-      //   copypos += offset;
-      // };
-      // return {
-      //   frame: payload.slice(1),
-      //   // bones: bones,
-      // };
     default:
       return null;
   }

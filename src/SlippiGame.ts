@@ -10,6 +10,7 @@ import {
   StockComputer,
 } from "./stats";
 import type {
+  BonesType,
   //BonesType,
   EnabledItemType,
   EventCallbackFunc,
@@ -169,10 +170,10 @@ export class SlippiGame {
     return this.parser.getGeckoList();
   }
 
-  //public getBones(): BonesType | null {
-  //  this._process(() => this.parser.getBones() !== null);
-  //  return this.parser.getBones();
-  //}
+  public getBones(): BonesType | null {
+    this._process();
+    return this.parser.getBones();
+  }
 
   public getStats(): StatsType | null {
     if (this.finalStats) {

@@ -239,15 +239,19 @@ export type ItemUpdateType = {
   instanceId: number | null;
 };
 
+// export type BonesType = {
+//   frame: number | null;
+//   playerIndex: number | null;
+//   charID: number | null;
+//   boneCount: number | null;
+//   bones: { posX: number | null, posY: number | null, posZ: number | null,
+//     rotX: number | null, rotY: number | null, rotZ: number | null, rotW: number | null, 
+//     scaleX: number | null, scaleY: number | null, scaleZ: number | null,
+//     useQuat: number | null}[]
+// };
+
 export type BonesType = {
-  frame: number | null;
-  playerIndex: number | null;
-  charID: number | null;
-  boneCount: number | null;
-  bones: { posX: number | null, posY: number | null, posZ: number | null,
-    rotX: number | null, rotY: number | null, rotZ: number | null, rotW: number | null, 
-    scaleX: number | null, scaleY: number | null, scaleZ: number | null,
-    useQuat: number | null}[]
+  content: Uint8Array;
 };
 
 export type FrameBookendType = {
