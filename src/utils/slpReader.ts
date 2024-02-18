@@ -587,20 +587,47 @@ export function parseMessage(command: Command, payload: Uint8Array): EventPayloa
       };
 
     case Command.BONES:
-      // let pos1 = 1;
-      // const content = []
+      let _bones: { 
+        ID: number | null,
+        posX: number | null, posY: number | null, posZ: number | null,
+        rotX: number | null, rotY: number | null, rotZ: number | null, rotW: number | null, 
+        scaleX: number | null, scaleY: number | null, scaleZ: number | null,
+        useQuat: number | null}[] = [];
 
-        // while (pos1 < payload.length) {
-        //   const word2 = readUint32(view, pos1) ?? 0;
-        //   let offset = 8;
-        //   content.push({
-        //     word2
-        //   })
+      let dataPos = 0;
+      let boneID = 0;
+      // const rawdataChunks = [];
+      // for (let i = 1; i < payload.length; i += 0x30) {
+      //     rawdataChunks.push(payload.slice(i, i + 0x30));
+      // }
+    
+      while (dataPos < payload.length) {
+        _bones.push({
+          ID: boneID,
+          posX: readFloat(view, 8+dataPos),
+          posY: readFloat(view, 12+dataPos),
+          posZ: readFloat(view, 16+dataPos),
+          rotX: readFloat(view, 20+dataPos),
+          rotY: readFloat(view, 24+dataPos),
+          rotZ: readFloat(view, 28+dataPos),
+          rotW: readFloat(view, 32+dataPos),
+          scaleX: readFloat(view, 36+dataPos),
+          scaleY: readFloat(view, 40+dataPos),
+          scaleZ: readFloat(view, 44+dataPos),
+          useQuat: readUint8(view, 48+dataPos)
+        })
 
-        //   pos1 += offset;
+        dataPos += 0x29
+        boneID += 1
 
+      }
       return {
-        content: payload.slice(1)
+        frame: readInt32(view, 0x1),
+        playerIndex: readUint8(view, 0x5),
+        charID: readUint8(view, 0x6),
+        boneCount: readUint8(view, 0x7),
+        bones: _bones,
+        // rawdata: rawdataChunks
       };
 
     case Command.GECKO_LIST:

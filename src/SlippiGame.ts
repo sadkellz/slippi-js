@@ -170,7 +170,7 @@ export class SlippiGame {
     return this.parser.getGeckoList();
   }
 
-  public getBones(): BonesType | null {
+  public getBones(): BonesType[] | null {
     this._process();
     return this.parser.getBones();
   }

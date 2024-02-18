@@ -1,20 +1,19 @@
 const { SlippiGame } = require("@slippi/slippi-js");
 
-const game = new SlippiGame("slp/bone_split_msg.slp");
-// const game = new SlippiGame("slp/use_quat.slp");
+const game = new SlippiGame("slp/split_msgv2.slp");
 
-const frames = game.getFrames();
 const bones = game.getBones();
 
-function uint8ArrayToBytesString(uint8Array) {
-    let bytesString = '';
-    for (let i = 0; i < uint8Array.length; i++) {
-        bytesString += uint8Array[i].toString(16).padStart(2, '0') + ' '; // Convert to hexadecimal representation
-    }
-    return bytesString.trim(); // Trim any trailing space
-}
-const bytesString = uint8ArrayToBytesString(bones.content);
+// function uint8ArrayToBytesString(uint8Array) {
+//     let bytesString = '';
+//     for (let i = 0; i < uint8Array.length; i++) {
+//         bytesString += uint8Array[i].toString(16).padStart(2, '0') + ' '; // Convert to hexadecimal representation
+//     }
+//     return bytesString.trim(); // Trim any trailing space
+// }
+// const bytesString = uint8ArrayToBytesString(bones[250].rawdata[4]);
 
 
-//console.log(bytesString);
-//console.log(frames.frame);
+// console.log(bytesString);
+console.log(bones[0].bones[9]);
+// console.log(bones[476].rawdata[0]);

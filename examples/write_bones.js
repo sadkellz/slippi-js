@@ -2,9 +2,9 @@ const fs = require('fs');
 const { SlippiGame } = require("@slippi/slippi-js");
 
 //const game = new SlippiGame("slp/CharID.slp");
-const game = new SlippiGame("slp/bone_split_msg.slp");
+const game = new SlippiGame("slp/split_msgv2.slp");
 
-// const frames = game.getFrames();
+const rawData = game.getBones();
 
 
 //     const boneCount = frames[0].frame[0].boneCount
@@ -18,15 +18,13 @@ const game = new SlippiGame("slp/bone_split_msg.slp");
 //         }
 //     });
 
-    //let boneData = frames[0].frame[0]
-    //boneData.bones = boneData.bones.slice(0, boneCount)
-
-    const boneData = game.getBones();
-
-    const dataJson = JSON.stringify(boneData, null, 2);
+    const boneCount = rawData[0].boneCount
+    const boneData = rawData[0].bones
+    const slicedData = rawData.slice(0, 5000);
+    const dataJson = JSON.stringify(slicedData, null, 2);
     const filePath = 'data.json';
   
     fs.writeFileSync(filePath, dataJson);
   
     console.log(`Data saved to ${filePath}`);
-//console.log(frames[0].frame[1]);
+// console.log(rawData[0]);

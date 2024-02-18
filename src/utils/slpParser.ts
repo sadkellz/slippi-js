@@ -56,8 +56,8 @@ export class SlpParser extends EventEmitter {
   private lastFinalizedFrame = Frames.FIRST - 1;
   private options: SlpParserOptions;
   private geckoList: GeckoListType | null = null;
-  private bones: BonesType | null = null;
-  // private bones: BonesType[] = [];
+  // private bones: BonesType | null = null;
+  private bones: BonesType[] = [];
   
   public constructor(options?: Partial<SlpParserOptions>) {
     super();
@@ -169,7 +169,7 @@ export class SlpParser extends EventEmitter {
     return this.frames;
   }
 
-  public getBones(): BonesType | null {
+  public getBones(): BonesType[] | null {
     return this.bones;
   }
 
@@ -194,7 +194,7 @@ export class SlpParser extends EventEmitter {
   }
   
   private _handleBones(payload: BonesType): void {
-    this.bones = payload;
+    this.bones.push(payload);
   }
 
   private _handleGameEnd(payload: GameEndType): void {
