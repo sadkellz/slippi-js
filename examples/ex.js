@@ -1,6 +1,6 @@
 const { SlippiGame } = require("@slippi/slippi-js");
 
-const game = new SlippiGame("slp/split_msgv2.slp");
+const game = new SlippiGame("slp/full_test.slp");
 
 const bones = game.getBones();
 
@@ -15,5 +15,6 @@ const bones = game.getBones();
 
 
 // console.log(bytesString);
-console.log(bones[0].bones[9]);
+console.log(bones[74].frame);
+console.log(bones[74].bones[0]);
 // console.log(bones[476].rawdata[0]);

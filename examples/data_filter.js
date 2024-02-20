@@ -23,7 +23,7 @@ fs.readFile('data.json', 'utf8', (err, jsonString) => {
     // Iterate over each data object and filter the bones
     for (const data of dataArray) {
       if (data.bones && Array.isArray(data.bones)) {
-        const filteredBones = data.bones.filter(bone => bone.rotW > 0.8 && bone.useQuat === 0);
+        const filteredBones = data.bones.filter(bone => bone.rotW < 0.1 && bone.rotW > 0 && bone.useQuat === 0);
         if (filteredBones.length > 0) {
           // Push filtered bones into the array
           filteredBonesArray.push({

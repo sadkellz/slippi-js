@@ -588,14 +588,14 @@ export function parseMessage(command: Command, payload: Uint8Array): EventPayloa
 
     case Command.BONES:
       let _bones: { 
-        ID: number | null,
+        boneId: number | null,
         posX: number | null, posY: number | null, posZ: number | null,
         rotX: number | null, rotY: number | null, rotZ: number | null, rotW: number | null, 
         scaleX: number | null, scaleY: number | null, scaleZ: number | null,
         useQuat: number | null}[] = [];
 
       let dataPos = 0;
-      let boneID = 0;
+      let boneId = 0;
       // const rawdataChunks = [];
       // for (let i = 1; i < payload.length; i += 0x30) {
       //     rawdataChunks.push(payload.slice(i, i + 0x30));
@@ -603,7 +603,7 @@ export function parseMessage(command: Command, payload: Uint8Array): EventPayloa
     
       while (dataPos < payload.length) {
         _bones.push({
-          ID: boneID,
+          boneId: boneId,
           posX: readFloat(view, 8+dataPos),
           posY: readFloat(view, 12+dataPos),
           posZ: readFloat(view, 16+dataPos),
@@ -618,13 +618,13 @@ export function parseMessage(command: Command, payload: Uint8Array): EventPayloa
         })
 
         dataPos += 0x29
-        boneID += 1
+        boneId += 1
 
       }
       return {
         frame: readInt32(view, 0x1),
         playerIndex: readUint8(view, 0x5),
-        charID: readUint8(view, 0x6),
+        charId: readUint8(view, 0x6),
         boneCount: readUint8(view, 0x7),
         bones: _bones,
         // rawdata: rawdataChunks
