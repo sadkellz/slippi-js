@@ -1,6 +1,6 @@
 const { SlippiGame } = require("@slippi/slippi-js");
 
-const game = new SlippiGame("slp/full_test.slp");
+const game = new SlippiGame("slp/3D_MarthVSPeach.slp");
 
 const bones = game.getBones();
 
@@ -16,5 +16,7 @@ const bones = game.getBones();
 
 // console.log(bytesString);
 console.log(bones[74].frame);
-console.log(bones[74].bones[0]);
+console.log(bones[74].playerIndex);
+console.log(bones[74].charId);
+console.log(bones[74].boneCount);
 // console.log(bones[476].rawdata[0]);
