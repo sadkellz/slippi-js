@@ -239,14 +239,23 @@ export type ItemUpdateType = {
   instanceId: number | null;
 };
 
+export type CameraData = {
+  eyeX: number | null;
+  eyeY: number | null;
+  eyeZ: number | null;
+  interestX: number | null;
+  interestY: number | null;
+  interestZ: number | null;
+  fov: number | null;
+};
+
 export type BonesType = {
   frame: number | null;
   playerIndex: number | null;
   charId: number | null;
   boneCount: number | null;
-  bones: { 
-    boneId: number | null,
-    posX: number | null, posY: number | null, posZ: number | null,
+  camData: CameraData | null;
+  bones: { posX: number | null, posY: number | null, posZ: number | null,
     rotX: number | null, rotY: number | null, rotZ: number | null, rotW: number | null, 
     scaleX: number | null, scaleY: number | null, scaleZ: number | null,
     useQuat: number | null}[];

@@ -2,7 +2,7 @@ const fs = require('fs');
 const { SlippiGame } = require("@slippi/slippi-js");
 
 //const game = new SlippiGame("slp/CharID.slp");
-const game = new SlippiGame("slp/3D_MarthVSPeach.slp");
+const game = new SlippiGame("slp/cam.slp");
 
 const rawData = game.getBones();
 
@@ -13,7 +13,7 @@ const slicedData = rawData.map(data => {
         ...data,
         bones: trimmedBones
     };
-}).slice(0, 5000);
+})//.slice(0, 500);
 
 const dataJson = JSON.stringify(slicedData, null, 2);
 const filePath = 'data.json';

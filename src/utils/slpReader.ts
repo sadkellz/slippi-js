@@ -4,6 +4,7 @@ import iconv from "iconv-lite";
 import mapValues from "lodash/mapValues";
 
 import type {
+  CameraData,
   EventCallbackFunc,
   EventPayloadTypes,
   GameEndType,
@@ -516,6 +517,39 @@ export function parseMessage(command: Command, payload: Uint8Array): EventPayloa
         instanceHitBy: readUint16(view, 0x51),
         instanceId: readUint16(view, 0x53),
       };
+      
+    // case Command.BONES:
+    //   let _bones: { 
+    //     posX: number | null, posY: number | null, posZ: number | null,
+    //     rotX: number | null, rotY: number | null, rotZ: number | null, rotW: number | null, 
+    //     scaleX: number | null, scaleY: number | null, scaleZ: number | null,
+    //     useQuat: number | null}[] = [];
+
+    //   for (let index = 0; index < 120; index++) {
+    //     _bones.push({
+    //       posX: readFloat(view, 8+index*0x28),
+    //       posY: readFloat(view, 12+index*0x28),
+    //       posZ: readFloat(view, 16+index*0x28),
+    //       rotX: readFloat(view, 20+index*0x28),
+    //       rotY: readFloat(view, 24+index*0x28),
+    //       rotZ: readFloat(view, 28+index*0x28),
+    //       rotW: readFloat(view, 32+index*0x28),
+    //       scaleX: readFloat(view, 36+index*0x28),
+    //       scaleY: readFloat(view, 40+index*0x28),
+    //       scaleZ: readFloat(view, 44+index*0x28),
+    //       useQuat: readUint8(view, 48+index*0x28)
+
+    //     })
+    //   }
+    //   return {
+    //     frame: readInt32(view, 0x1),
+    //     playerIndex: readUint8(view, 0x5),
+    //     charID: readUint8(view, 0x6),
+    //     boneCount: readUint8(view, 0x7),
+    //     bones: _bones,
+    //   };
+
+    
     case Command.ITEM_UPDATE:
       return {
         frame: readInt32(view, 0x1),
@@ -554,14 +588,23 @@ export function parseMessage(command: Command, payload: Uint8Array): EventPayloa
       };
 
     case Command.BONES:
+      const _camData: CameraData = {
+        eyeX: readFloat(view, 8),
+        eyeY: readFloat(view, 12),
+        eyeZ: readFloat(view, 16),
+        interestX: readFloat(view, 20),
+        interestY: readFloat(view, 24),
+        interestZ: readFloat(view, 28),
+        fov: readFloat(view, 32)
+      };
       let _bones: { 
-        boneId: number | null,
+        Id: number | null,
         posX: number | null, posY: number | null, posZ: number | null,
         rotX: number | null, rotY: number | null, rotZ: number | null, rotW: number | null, 
         scaleX: number | null, scaleY: number | null, scaleZ: number | null,
         useQuat: number | null}[] = [];
 
-      let dataPos = 0;
+      let dataPos = 0x24;
       let boneId = 0;
       // const rawdataChunks = [];
       // for (let i = 1; i < payload.length; i += 0x30) {
@@ -570,18 +613,18 @@ export function parseMessage(command: Command, payload: Uint8Array): EventPayloa
     
       while (dataPos < payload.length) {
         _bones.push({
-          boneId: boneId,
-          posX: readFloat(view, 8+dataPos),
-          posY: readFloat(view, 12+dataPos),
-          posZ: readFloat(view, 16+dataPos),
-          rotX: readFloat(view, 20+dataPos),
-          rotY: readFloat(view, 24+dataPos),
-          rotZ: readFloat(view, 28+dataPos),
-          rotW: readFloat(view, 32+dataPos),
-          scaleX: readFloat(view, 36+dataPos),
-          scaleY: readFloat(view, 40+dataPos),
-          scaleZ: readFloat(view, 44+dataPos),
-          useQuat: readUint8(view, 48+dataPos)
+          Id: boneId,
+          posX: readFloat(view, dataPos),
+          posY: readFloat(view, 4+dataPos),
+          posZ: readFloat(view, 8+dataPos),
+          rotX: readFloat(view, 12+dataPos),
+          rotY: readFloat(view, 16+dataPos),
+          rotZ: readFloat(view, 20+dataPos),
+          rotW: readFloat(view, 24+dataPos),
+          scaleX: readFloat(view, 28+dataPos),
+          scaleY: readFloat(view, 32+dataPos),
+          scaleZ: readFloat(view, 36+dataPos),
+          useQuat: readUint8(view, 40+dataPos)
         })
 
         dataPos += 0x29
@@ -593,6 +636,7 @@ export function parseMessage(command: Command, payload: Uint8Array): EventPayloa
         playerIndex: readUint8(view, 0x5),
         charId: readUint8(view, 0x6),
         boneCount: readUint8(view, 0x7),
+        camData: _camData,
         bones: _bones,
         // rawdata: rawdataChunks
       };
